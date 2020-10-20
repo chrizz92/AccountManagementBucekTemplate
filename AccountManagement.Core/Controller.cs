@@ -93,18 +93,9 @@ namespace AccountManagement.Core
         /// <returns>Konnte das Konto angelegt werden?</returns>
         public bool AddAccount(int accountNumber, bool isYouthAccount = false)
         {
-            bool isAddSuccessfull = true;
-            try
-            {
-                Account accountToAdd = new Account(accountNumber);
-                _accounts.Add(accountToAdd);
-            }
-            catch (ArgumentException e)
-            {
-                isAddSuccessfull = false;
-            }
-
-            return isAddSuccessfull;
+            Account accountToAdd = new Account(accountNumber);
+            _accounts.Add(accountToAdd);
+            return true;
         }
 
         /// <summary>
