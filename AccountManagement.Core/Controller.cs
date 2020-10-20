@@ -42,6 +42,7 @@ namespace AccountManagement.Core
                 }
             }
 
+            //
             //for (int i = 0; i < NumberOfAccounts; i++)
             //{
             //    if (_accounts[i].AccountNumber == accountNumber)
@@ -50,6 +51,16 @@ namespace AccountManagement.Core
             //        break;
             //    }
             //}
+
+            //
+            //for (int i = 0; i < NumberOfAccounts; i++)
+            //{
+            //    if (_accounts[i].AccountNumber == accountNumber)
+            //    {
+            //        return _accounts[i];
+            //    }
+            //}
+            //return null;
 
             return accountToReturn;
         }
@@ -62,7 +73,15 @@ namespace AccountManagement.Core
         /// <returns>Konnte das Konto angelegt werden?</returns>
         public bool AddAccount(Account accountToAdd)
         {
-            throw new NotImplementedException();
+            bool isAccountAdded = false;
+
+            if (GetAccount(accountToAdd.AccountNumber) == null)
+            {
+                _accounts.Add(accountToAdd);
+                isAccountAdded = true;
+            }
+
+            return isAccountAdded;
         }
 
         /// <summary>
@@ -74,7 +93,18 @@ namespace AccountManagement.Core
         /// <returns>Konnte das Konto angelegt werden?</returns>
         public bool AddAccount(int accountNumber, bool isYouthAccount = false)
         {
-            throw new NotImplementedException();
+            bool isAddSuccessfull = true;
+            try
+            {
+                Account accountToAdd = new Account(accountNumber);
+                _accounts.Add(accountToAdd);
+            }
+            catch (ArgumentException e)
+            {
+                isAddSuccessfull = false;
+            }
+
+            return isAddSuccessfull;
         }
 
         /// <summary>
@@ -85,7 +115,13 @@ namespace AccountManagement.Core
         /// <returns>existiert das Konto?</returns>
         public bool PayIn(int accountNumber, double amount)
         {
-            throw new NotImplementedException();
+            bool isAccountAvailable = false;
+            if (GetAccount(accountNumber) != null)
+            {
+                GetAccount(accountNumber).PayIn(amount);
+                isAccountAvailable = true;
+            }
+            return isAccountAvailable;
         }
 
         /// <summary>
@@ -97,7 +133,17 @@ namespace AccountManagement.Core
         /// <returns>War die Abhebung erfolgreich?</returns>
         public bool RaiseFrom(int accountNumber, double amount)
         {
-            throw new NotImplementedException();
+            bool isRaiseSuccessfull = false;
+
+            if (GetAccount(accountNumber) != null)
+            {
+                if (GetAccount(accountNumber).RaiseFrom(amount))
+                {
+                    isRaiseSuccessfull = true;
+                }
+            }
+
+            return isRaiseSuccessfull;
         }
 
         /// <summary>
@@ -112,7 +158,18 @@ namespace AccountManagement.Core
         public bool Transfer(int accountNumberFrom, int accountNumberTo,
                                 double amount)
         {
-            throw new NotImplementedException();
+            bool isTransferSuccessfull = false;
+
+            if (GetAccount(accountNumberTo) != null && GetAccount(accountNumberFrom) != null)
+            {
+                if (GetAccount(accountNumberFrom).RaiseFrom(amount))
+                {
+                    GetAccount(accountNumberTo).PayIn(amount);
+                    isTransferSuccessfull = true;
+                }
+            }
+
+            return isTransferSuccessfull;
         }
     }
 }
